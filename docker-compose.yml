@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    volumes:
+      - .:/home/node/app
+    depends_on:
+      - db
+    command: npm run start:dev
+
+  db:
+    image: bitnami/mongodb:5.0.17
+    volumes:
+      - mongosb_data:/bitnami/mongodb
+    environment:
+      MONGODB_ROOT_PASSWORD: root
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_KEY: 123456
+      MONGODB_DATABASE: nest
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongosb_data:
+    driver: local
